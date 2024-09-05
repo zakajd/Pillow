@@ -776,17 +776,12 @@ class TestImage:
         assert not dict(exif)
 
     def test_duplicate_exif_header(self) -> None:
-        with Image.open("Tests/images/exif2.jpg") as im:
+        with Image.open("Tests/images/exif.png") as im:
+            im.load()
+            im.info["exif"] = b"Exif\x00\x00" + im.info["exif"]
+
             exif = im.getexif()
-        assert dict(exif)
-
-        # Test that exif data is cleared after another load
-        exif.load(None)
-        assert not dict(exif)
-
-        # Test loading just the EXIF header
-        exif.load(b"Exif\x00\x00Exif\x00\x00")
-        assert not dict(exif)
+        assert exif[274] == 1
 
     def test_empty_get_ifd(self) -> None:
         exif = Image.Exif()
