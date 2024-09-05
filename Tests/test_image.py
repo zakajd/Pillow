@@ -775,6 +775,19 @@ class TestImage:
         exif.load(b"Exif\x00\x00")
         assert not dict(exif)
 
+    def test_empty_exif2(self) -> None:
+        with Image.open("Tests/images/exif2.png") as im:
+            exif = im.getexif()
+        assert dict(exif)
+
+        # Test that exif data is cleared after another load
+        exif.load(None)
+        assert not dict(exif)
+
+        # Test loading just the EXIF header
+        exif.load(b"Exif\x00\x00Exif\x00\x00")
+        assert not dict(exif)
+
     def test_empty_get_ifd(self) -> None:
         exif = Image.Exif()
         ifd = exif.get_ifd(0x8769)
