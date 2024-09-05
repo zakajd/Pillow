@@ -775,8 +775,8 @@ class TestImage:
         exif.load(b"Exif\x00\x00")
         assert not dict(exif)
 
-    def test_empty_exif2(self) -> None:
-        with Image.open("Tests/images/exif2.png") as im:
+    def test_duplicate_exif_header(self) -> None:
+        with Image.open("Tests/images/exif2.jpg") as im:
             exif = im.getexif()
         assert dict(exif)
 
